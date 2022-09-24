@@ -6,7 +6,7 @@ import MessageOut from './MessageOut'
 const Messages = () => {
   return (
     <View style={styles.container}>
-    <ScrollView>
+    <ScrollView bounces alwaysBounceVertical canCancelContentTouches indicatorStyle='white' >
     <MessageIn />
     <MessageIn />
     <MessageIn />
@@ -31,7 +31,6 @@ const Messages = () => {
     <MessageOut />
     <MessageOut />
     <MessageOut />
-
     </ScrollView>
     </View>
   )
@@ -41,7 +40,7 @@ export default Messages
 
 const styles = StyleSheet.create({
   container:{
-    marginTop:10,
-    marginBottom:80,
+    borderRadius:20,
+    marginBottom:-5,
   }
 })

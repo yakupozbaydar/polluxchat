@@ -1,4 +1,4 @@
-import {StyleSheet, Text, View } from 'react-native'
+import {StyleSheet,View } from 'react-native'
 import React from 'react'
 import Sidebar from '../components/Sidebar'
 import Chat from '../components/Chat'
@@ -9,7 +9,7 @@ const Home = () => {
         <View style={styles.sidebar}>
             <Sidebar/>
         </View>
-        <View style={styles.chat}>
+        <View  style={styles.chat}>
             <Chat/>
         </View>
     </View>

@@ -1,4 +1,4 @@
-import { Dimensions, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
+import { Dimensions, KeyboardAvoidingView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import React from 'react'
 import { Feather } from '@expo/vector-icons';
 
@@ -7,9 +7,9 @@ export const screenWidth=Dimensions.get("screen").width
 const Input = () => {
   return (
     <View style={styles.container}>
-      <TextInput placeholder='Mesaj...' style={{flex:1}} />
-      <TouchableOpacity style={styles.send}>
-        <Feather name="send" size={28} color="black" />
+      <TextInput placeholder='Mesaj...' style={{flex:1}}/>
+      <TouchableOpacity onLongPress={() => console.log("long")} style={styles.send}>
+        <Feather name="send" size={24} color="black" />
       </TouchableOpacity>
       </View>
   )
@@ -19,19 +19,16 @@ export default Input
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "yellow",
-    height: 50,
-    marginTop: screenHeight*11/12,
-    width: 350,
-    padding: 10,
+    borderWidth:1,
+    height: screenHeight/16,
+    width:screenWidth*5/6,
+    padding: 15,
     flexDirection: "row",
-    position: "absolute",
     justifyContent: "space-between",
     borderRadius:50,
     alignItems:"center",
   },
   send:{
-    marginRight:10,
-    color:"red",
+    marginRight:5,
   }
 })
