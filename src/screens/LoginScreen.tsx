@@ -1,8 +1,10 @@
 import { StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import React from 'react'
 import Button1 from '../components/Button1'
+import { useNavigation } from '@react-navigation/native'
 
 const LoginScreen = () => {
+  const navigation = useNavigation();
   return (
     <View style={styles.container}>
       <View style={styles.innerContainer}>
@@ -24,7 +26,7 @@ const LoginScreen = () => {
           <Text style={styles.text2}>
             Hesabın yok mu?
           </Text>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => navigation.navigate("RegisterScreen")}>
             <Text style={styles.text1}>Kayıt Ol</Text>
           </TouchableOpacity>
         </View>

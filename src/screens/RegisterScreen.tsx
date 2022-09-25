@@ -1,8 +1,18 @@
 import { StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import Button1 from '../components/Button1'
+import { useNavigation } from '@react-navigation/native'
 
 const RegisterScreen = () => {
+    const [userName, setUserName] = useState("")
+    const [email, setEmail] = useState("")
+    const [password, setPassword] = useState("")
+    useEffect(() => {
+        return () => {
+            effect
+        };
+    }, [input])
+    const navigation = useNavigation()
     return (
         <View style={styles.container}>
             <View style={styles.innerContainer}>
@@ -25,7 +35,7 @@ const RegisterScreen = () => {
                 <Text style={styles.text2}>
                     Hesabın var mı ?
                 </Text>
-                    <TouchableOpacity>
+                    <TouchableOpacity onPress={() => navigation.navigate("LoginScreen")}>
                         <Text style={styles.text1}>Giriş Yap</Text>
                     </TouchableOpacity>
                 </View>

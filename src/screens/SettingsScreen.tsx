@@ -1,5 +1,6 @@
 import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
+import { screenHeight, screenWidth } from '../components/Input'
 
 const SettingsScreen = () => {
   return (
@@ -18,7 +19,10 @@ const styles = StyleSheet.create({
         alignItems:"center",
     },
     header:{
-        marginTop:50,
+        width:screenWidth,
+        justifyContent:"center",
+        alignItems:"center",
+        marginTop:screenHeight/16,
         borderBottomWidth:1,
     }
 })
