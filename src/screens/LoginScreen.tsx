@@ -1,26 +1,40 @@
 import { StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import Button1 from '../components/Button1'
 import { useNavigation } from '@react-navigation/native'
+import { signInWithEmailAndPassword } from 'firebase/auth'
+import { auth } from '../firebase'
 
 const LoginScreen = () => {
   const navigation = useNavigation();
+  const [email, setEmail] = useState("")
+  const [password, setPassword] = useState("")
+  
+  const handleLogin = () => {
+    signInWithEmailAndPassword(auth,email,password)
+    .then(userCredentials => {
+      const user = userCredentials.user;
+      console.log("logged in");
+    })
+    .catch(error => alert(error.message))
+  }
+
   return (
     <View style={styles.container}>
       <View style={styles.innerContainer}>
         <View style={{ alignItems: "center" }}>
           <Text style={{ fontSize: 28, fontWeight: "900" }}>
-            Pollux Chat
+            polluxchat
           </Text>
           <Text style={{ fontSize: 22 }}>
             Giriş Yap
           </Text>
         </View>
         <View style={styles.inputContainer}>
-          <TextInput placeholder='E-mail' style={styles.input} />
-          <TextInput placeholder='Şifre' secureTextEntry style={styles.input} />
+          <TextInput onChangeText={(e) => setEmail(e) } keyboardType='email-address' placeholder='E-mail' style={styles.input} />
+          <TextInput autoCorrect={false} onChangeText={(p) => setPassword(p)} placeholder='Şifre' secureTextEntry style={styles.input} />
         </View>
-        <Button1 text='Giriş Yap' onPress={() => console.log("basıldı")} />
+        <Button1 text='Giriş Yap' onPress={handleLogin} />
         <View style={styles.textContainer}>
 
           <Text style={styles.text2}>
