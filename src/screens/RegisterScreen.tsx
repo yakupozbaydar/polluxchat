@@ -1,4 +1,4 @@
-import { StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
+import { KeyboardAvoidingView, Platform, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import Button1 from '../components/Button1'
 import { useNavigation } from '@react-navigation/native'
@@ -21,9 +21,8 @@ const RegisterScreen = () => {
             }).catch(error => alert(error.message) )
 
     }
-    if(!error){
     return (
-        <View style={styles.container}>
+        <KeyboardAvoidingView style={styles.container} behavior={Platform.OS === "ios" ? "padding" : "height"}>
             <View style={styles.innerContainer}>
                 <View style={{ alignItems: "center" }}>
                     <Text style={{ fontSize: 28, fontWeight: "900" }}>
@@ -48,14 +47,8 @@ const RegisterScreen = () => {
                     </TouchableOpacity>
                 </View>
             </View>
-        </View>
+        </KeyboardAvoidingView>
     )}
-    else{
-        return(
-            alert("User created")
-        )
-    }
-}
 
 export default RegisterScreen
 

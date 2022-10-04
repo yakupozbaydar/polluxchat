@@ -1,5 +1,5 @@
 import { KeyboardAvoidingView, StyleSheet, Text, View, Image, Platform } from 'react-native'
-import React from 'react'
+import React, { useContext } from 'react'
 import Messages from './Messages'
 import Input from './Input'
 import { screenWidth, screenHeight } from "./Input"

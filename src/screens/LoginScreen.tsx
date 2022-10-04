@@ -1,26 +1,31 @@
-import { StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
-import React, { useEffect, useState } from 'react'
+import { KeyboardAvoidingView, Platform, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
+import React, { useContext, useEffect, useState } from 'react'
 import Button1 from '../components/Button1'
 import { useNavigation } from '@react-navigation/native'
-import { signInWithEmailAndPassword } from 'firebase/auth'
+import { getAuth, signInWithEmailAndPassword } from 'firebase/auth'
 import { auth } from '../firebase'
+import { useDispatch, useSelector } from 'react-redux'
+import { UserDispatch, UserState } from '../redux/stroje'
+import { setActiveUser } from '../redux/userSlice'
 
 const LoginScreen = () => {
   const navigation = useNavigation();
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
-  
+  const dispatch = useDispatch<UserDispatch>()
+  const user = useSelector<UserState>(state => state.user)
   const handleLogin = () => {
     signInWithEmailAndPassword(auth,email,password)
     .then(userCredentials => {
-      const user = userCredentials.user;
-      console.log("logged in");
+        dispatch(setActiveUser(userCredentials.user))
+        console.log(userCredentials.user.uid)
+        console.log("redux"+user);
     })
     .catch(error => alert(error.message))
   }
 
   return (
-    <View style={styles.container}>
+    <KeyboardAvoidingView style={styles.container} behavior={Platform.OS === "ios" ? "padding" : "height"} >
       <View style={styles.innerContainer}>
         <View style={{ alignItems: "center" }}>
           <Text style={{ fontSize: 28, fontWeight: "900" }}>
@@ -45,7 +50,7 @@ const LoginScreen = () => {
           </TouchableOpacity>
         </View>
       </View>
-    </View>
+    </KeyboardAvoidingView>
   )
 }
 
