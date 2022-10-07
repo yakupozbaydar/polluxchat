@@ -1,16 +1,18 @@
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import React from 'react'
+import { ActivityIndicator, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import React, { useState } from 'react'
 
 type ButtonProps = {
     text:string,
-    onPress:() => void
+    onPress:() => void,
+    pending:boolean, 
 }
 
 
-const Button1:React.FC<ButtonProps> = ({text,onPress}) => {
+const Button1:React.FC<ButtonProps> = ({text,onPress,pending}) => {
     return (
         <TouchableOpacity style={styles.container} onPress={onPress}>
-            <Text>{text}</Text>
+            {pending ? <ActivityIndicator size={"small"} color="black" />:
+            <Text>{text}</Text>}
         </TouchableOpacity>
     )
 }

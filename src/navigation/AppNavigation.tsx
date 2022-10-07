@@ -30,7 +30,7 @@ const AppStackContainer = () => {
 }
 
 export default function AppNavigation() {
-    const user = useSelector<UserState>(state => state.user.user)
+    const user = useSelector<UserState>(state => state.userSlice.user.email)
     if (user == null) {
         return (
             <AuthStackContainer />

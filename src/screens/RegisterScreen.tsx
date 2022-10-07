@@ -4,6 +4,9 @@ import Button1 from '../components/Button1'
 import { useNavigation } from '@react-navigation/native'
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth } from '../firebase';
+import { useDispatch, useSelector } from 'react-redux';
+import { UserDispatch, UserState } from '../redux/stroje';
+import { pendingEnd, pendingStart } from '../redux/userSlice';
 
 const RegisterScreen = () => {
     const [error, setError] = useState(false)
@@ -11,7 +14,10 @@ const RegisterScreen = () => {
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
     const navigation = useNavigation()
+    const dispatch = useDispatch<UserDispatch>()
+    const pending = useSelector<UserState>(state => state.userSlice.pending)
     const handleRegister = () => {
+        dispatch(pendingStart())
              createUserWithEmailAndPassword(auth, email, password)
             .then(userCredentials => {
                 const user=userCredentials.user;
@@ -37,12 +43,12 @@ const RegisterScreen = () => {
                     <TextInput value={email} onChangeText={e => setEmail(e)} keyboardType='email-address' placeholder='E-mail' style={styles.input} />
                     <TextInput value={password} autoCorrect={false} onChangeText={p => setPassword(p)} placeholder='Şifre' secureTextEntry style={styles.input} />
                 </View>
-                <Button1 text='Register' onPress={handleRegister} />
+                <Button1 pending={pending} text='Register' onPress={handleRegister} />
                 <View style={styles.textContainer}>
                     <Text style={styles.text2}>
                         Hesabın var mı ?
                     </Text>
-                    <TouchableOpacity onPress={() => navigation.navigate("LoginScreen")}>
+                    <TouchableOpacity onPress={() => {navigation.replace("LoginScreen")}}>
                         <Text style={styles.text1}>Giriş Yap</Text>
                     </TouchableOpacity>
                 </View>
@@ -54,10 +60,10 @@ export default RegisterScreen
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
         backgroundColor: "#000000",
-        justifyContent: "center",
-        alignItems: "center",
+        flex:1,
+        justifyContent:"center",
+        alignItems:"center",
     },
     input: {
         backgroundColor: "white",

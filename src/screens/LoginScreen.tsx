@@ -6,22 +6,21 @@ import { getAuth, signInWithEmailAndPassword } from 'firebase/auth'
 import { auth } from '../firebase'
 import { useDispatch, useSelector } from 'react-redux'
 import { UserDispatch, UserState } from '../redux/stroje'
-import { setActiveUser } from '../redux/userSlice'
+import {pendingEnd, pendingStart, setActiveUser } from '../redux/userSlice'
 
 const LoginScreen = () => {
   const navigation = useNavigation();
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const dispatch = useDispatch<UserDispatch>()
-  const user = useSelector<UserState>(state => state.user)
+  const pending = useSelector<UserState>(state => state.userSlice.pending)
   const handleLogin = () => {
+    dispatch(pendingStart())
     signInWithEmailAndPassword(auth,email,password)
     .then(userCredentials => {
         dispatch(setActiveUser(userCredentials.user))
-        console.log(userCredentials.user.uid)
-        console.log("redux"+user);
-    })
-    .catch(error => alert(error.message))
+      })
+    .catch(error => dispatch(pendingEnd(error)))
   }
 
   return (
@@ -39,7 +38,7 @@ const LoginScreen = () => {
           <TextInput onChangeText={(e) => setEmail(e) } keyboardType='email-address' placeholder='E-mail' style={styles.input} />
           <TextInput autoCorrect={false} onChangeText={(p) => setPassword(p)} placeholder='Şifre' secureTextEntry style={styles.input} />
         </View>
-        <Button1 text='Giriş Yap' onPress={handleLogin} />
+        <Button1 pending={pending} text='Giriş Yap' onPress={handleLogin} />
         <View style={styles.textContainer}>
 
           <Text style={styles.text2}>
@@ -70,7 +69,7 @@ const styles = StyleSheet.create({
     width: 330,
     height: 50,
     margin: 20,
-    padding: 15,
+    paddingLeft:15,
     borderRadius: 30,
   },
   innerContainer: {
