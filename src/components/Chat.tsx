@@ -7,7 +7,7 @@ import { screenWidth, screenHeight } from "./Input"
 
 const Chat = () => {
   return (
-    <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"} style={styles.container}>
+    <KeyboardAvoidingView style={styles.container}>
       <View style={styles.headerContainer}>
         <Image source={{ uri: 'https://pbs.twimg.com/profile_images/486929358120964097/gNLINY67_400x400.png' }} style={{ width: 50, height: 50, borderRadius: 25, marginRight: 5 }} />
         <Text>Mehmet</Text>

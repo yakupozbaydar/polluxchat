@@ -6,7 +6,7 @@ import { getAuth, signInWithEmailAndPassword } from 'firebase/auth'
 import { auth } from '../firebase'
 import { useDispatch, useSelector } from 'react-redux'
 import { UserDispatch, UserState } from '../redux/stroje'
-import {pendingEnd, pendingStart, setActiveUser } from '../redux/userSlice'
+import { pendingEnd, pendingEndWithAlert, pendingStart, setActiveUser } from '../redux/userSlice'
 
 const LoginScreen = () => {
   const navigation = useNavigation();
@@ -14,13 +14,16 @@ const LoginScreen = () => {
   const [password, setPassword] = useState("")
   const dispatch = useDispatch<UserDispatch>()
   const pending = useSelector<UserState>(state => state.userSlice.pending)
+  useEffect(() => {
+    dispatch(pendingEnd())
+  }, [])
   const handleLogin = () => {
     dispatch(pendingStart())
-    signInWithEmailAndPassword(auth,email,password)
-    .then(userCredentials => {
+    signInWithEmailAndPassword(auth, email, password)
+      .then(userCredentials => {
         dispatch(setActiveUser(userCredentials.user))
       })
-    .catch(error => dispatch(pendingEnd(error)))
+      .catch(error => dispatch(pendingEndWithAlert(error)))
   }
 
   return (
@@ -35,7 +38,7 @@ const LoginScreen = () => {
           </Text>
         </View>
         <View style={styles.inputContainer}>
-          <TextInput onChangeText={(e) => setEmail(e) } keyboardType='email-address' placeholder='E-mail' style={styles.input} />
+          <TextInput onChangeText={(e) => setEmail(e)} keyboardType='email-address' placeholder='E-mail' style={styles.input} />
           <TextInput autoCorrect={false} onChangeText={(p) => setPassword(p)} placeholder='Şifre' secureTextEntry style={styles.input} />
         </View>
         <Button1 pending={pending} text='Giriş Yap' onPress={handleLogin} />
@@ -44,7 +47,7 @@ const LoginScreen = () => {
           <Text style={styles.text2}>
             Hesabın yok mu?
           </Text>
-          <TouchableOpacity onPress={() => navigation.navigate("RegisterScreen")}>
+          <TouchableOpacity onPress={() => navigation.navigate("RegisterScreen" as never)}>
             <Text style={styles.text1}>Kayıt Ol</Text>
           </TouchableOpacity>
         </View>
@@ -69,7 +72,7 @@ const styles = StyleSheet.create({
     width: 330,
     height: 50,
     margin: 20,
-    paddingLeft:15,
+    paddingLeft: 15,
     borderRadius: 30,
   },
   innerContainer: {
@@ -90,7 +93,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     margin: 30,
   },
-  inputContainer:{
-    flex:1,
+  inputContainer: {
+    flex: 1,
   }
 })

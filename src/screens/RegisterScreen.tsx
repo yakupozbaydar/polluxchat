@@ -3,32 +3,40 @@ import React, { useEffect, useState } from 'react'
 import Button1 from '../components/Button1'
 import { useNavigation } from '@react-navigation/native'
 import { createUserWithEmailAndPassword } from "firebase/auth";
-import { auth } from '../firebase';
+import { auth, db } from '../firebase';
 import { useDispatch, useSelector } from 'react-redux';
 import { UserDispatch, UserState } from '../redux/stroje';
-import { pendingEnd, pendingStart } from '../redux/userSlice';
+import { pendingEnd, pendingEndWithAlert, pendingStart } from '../redux/userSlice';
+import { doc, setDoc } from "firebase/firestore"; 
+
 
 const RegisterScreen = () => {
-    const [error, setError] = useState(false)
     const [userName, setUserName] = useState("")
     const [email, setEmail] = useState("")
+    const [photo, setPhoto] = useState("")
     const [password, setPassword] = useState("")
     const navigation = useNavigation()
     const dispatch = useDispatch<UserDispatch>()
     const pending = useSelector<UserState>(state => state.userSlice.pending)
-    const handleRegister = () => {
+    const handleRegister = async () => {
         dispatch(pendingStart())
-             createUserWithEmailAndPassword(auth, email, password)
-            .then(userCredentials => {
-                const user=userCredentials.user;
+        await createUserWithEmailAndPassword(auth, email, password)
+            .then(async userCredentials => {
+                const user = userCredentials.user;
+                await setDoc(doc(db,"users",user.uid),{
+                    email,
+                    photo,
+                    uid:user.uid,
+                    username:userName,
+                })
+                await setDoc(doc(db,"userChats",user.uid),{})
                 console.log(user)
-                setError(true)
-                navigation.navigate("LoginScreen")
-            }).catch(error => alert(error.message) )
+                navigation.navigate("LoginScreen" as never)
+            }).catch(error => dispatch(pendingEndWithAlert(error)))
 
     }
     return (
-        <KeyboardAvoidingView style={styles.container} behavior={Platform.OS === "ios" ? "padding" : "height"}>
+        <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"} style={styles.container}>
             <View style={styles.innerContainer}>
                 <View style={{ alignItems: "center" }}>
                     <Text style={{ fontSize: 28, fontWeight: "900" }}>
@@ -39,31 +47,32 @@ const RegisterScreen = () => {
                     </Text>
                 </View>
                 <View>
-                    <TextInput value={userName}  onChangeText={u => setUserName(u)} placeholder='Kullanıcı Adı' style={styles.input} />
+                    <TextInput value={userName} onChangeText={u => setUserName(u)} placeholder='Kullanıcı Adı' style={styles.input} />
                     <TextInput value={email} onChangeText={e => setEmail(e)} keyboardType='email-address' placeholder='E-mail' style={styles.input} />
                     <TextInput value={password} autoCorrect={false} onChangeText={p => setPassword(p)} placeholder='Şifre' secureTextEntry style={styles.input} />
                 </View>
                 <Button1 pending={pending} text='Register' onPress={handleRegister} />
                 <View style={styles.textContainer}>
                     <Text style={styles.text2}>
-                        Hesabın var mı ?
+                        Hesabın var mı?
                     </Text>
-                    <TouchableOpacity onPress={() => {navigation.replace("LoginScreen")}}>
+                    <TouchableOpacity onPress={() => { navigation.replace("LoginScreen") }}>
                         <Text style={styles.text1}>Giriş Yap</Text>
                     </TouchableOpacity>
                 </View>
             </View>
         </KeyboardAvoidingView>
-    )}
+    )
+}
 
 export default RegisterScreen
 
 const styles = StyleSheet.create({
     container: {
         backgroundColor: "#000000",
-        flex:1,
-        justifyContent:"center",
-        alignItems:"center",
+        flex: 1,
+        justifyContent: "center",
+        alignItems: "center",
     },
     input: {
         backgroundColor: "white",

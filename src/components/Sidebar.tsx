@@ -22,26 +22,6 @@ const Sidebar = () => {
           <Chats />
           <Chats />
           <Chats />
-          <Chats />
-          <Chats />
-          <Chats />
-          <Chats />
-          <Chats />
-          <Chats />
-          <Chats />
-          <Chats />
-          <Chats />
-          <Chats />
-          <Chats />
-          <Chats />
-          <Chats />
-          <Chats />
-          <Chats />
-          <Chats />
-          <Chats />
-          <Chats />
-          <Chats />
-          <Chats />
         </ScrollView>
       </View>
       <TouchableOpacity onPress={() => navigation.navigate("SettingsScreen")} style={styles.settings}>

@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit'
 
-type initalProps = {
+export type initalProps = {
   user:{
     email:string | null,
     uid:string | null,
@@ -29,9 +29,12 @@ const userSlice = createSlice({
     pendingStart:(state) => {
       state.pending=true
     },
-    pendingEnd:(state,action) => {
+    pendingEndWithAlert:(state,action) => {
       state.pending=false
       alert(action.payload)
+    },
+    pendingEnd:(state) => {
+      state.pending=false
     },
     setActiveUser: (state, action) => {
       state.user.email = action.payload.email
@@ -49,5 +52,5 @@ const userSlice = createSlice({
   }
 });
 
-export const { pendingStart,pendingEnd,setActiveUser, setUserLogout } = userSlice.actions
+export const { pendingStart,pendingEnd,pendingEndWithAlert,setActiveUser, setUserLogout } = userSlice.actions
 export default userSlice.reducer
