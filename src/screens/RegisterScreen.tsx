@@ -5,7 +5,7 @@ import { useNavigation } from '@react-navigation/native'
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth, db } from '../firebase';
 import { useDispatch, useSelector } from 'react-redux';
-import { UserDispatch, UserState } from '../redux/stroje';
+import { UserDispatch, UserState } from '../redux/store';
 import { pendingEnd, pendingEndWithAlert, pendingStart } from '../redux/userSlice';
 import { doc, setDoc } from "firebase/firestore"; 
 

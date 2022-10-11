@@ -5,7 +5,7 @@ import { useNavigation } from '@react-navigation/native'
 import { getAuth, signInWithEmailAndPassword } from 'firebase/auth'
 import { auth } from '../firebase'
 import { useDispatch, useSelector } from 'react-redux'
-import { UserDispatch, UserState } from '../redux/stroje'
+import { UserDispatch, UserState } from '../redux/store'
 import { pendingEnd, pendingEndWithAlert, pendingStart, setActiveUser } from '../redux/userSlice'
 
 const LoginScreen = () => {

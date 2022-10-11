@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { setUserLogout } from '../redux/userSlice'
 import { signOut } from 'firebase/auth'
 import { auth } from '../firebase'
-import { UserState } from '../redux/stroje'
+import { UserState } from '../redux/store'
 
 const SettingsScreen = () => {
   const user= useSelector<UserState>(state => state.userSlice.user)
@@ -26,7 +26,7 @@ const SettingsScreen = () => {
       <View style={styles.header}>
         <Text style={styles.headerText}>Settings</Text>
       </View>
-        <Text>{user.email}</Text>
+        <Text>Email:{user.email}</Text>
         <Logout onPress={handleLogout} />
     </View>
   )

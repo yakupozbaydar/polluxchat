@@ -48,7 +48,7 @@ const userSlice = createSlice({
       state.user.uid =null
       state.user.photoURL =null
       state.user.isOnline=false
-    }
+    },
   }
 });
 

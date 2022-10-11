@@ -1,17 +1,17 @@
-import { StyleSheet, View, Text } from 'react-native'
+import { StyleSheet, View, Text, Animated } from 'react-native'
 import React, { useContext } from 'react'
 import Sidebar from '../components/Sidebar'
 import Chat from '../components/Chat'
 import { useSelector } from 'react-redux'
-import { UserState } from '../redux/stroje'
+import { UserState } from '../redux/store'
 import { auth } from '../firebase'
 
 const Home = () => {
     return (
         <View style={styles.container}>
-            <View style={styles.sidebar}>
+            <Animated.View style={styles.sidebar}>
                 <Sidebar />
-            </View>
+            </Animated.View>
             <View style={styles.chat}>
                 <Chat />
             </View>
@@ -27,11 +27,10 @@ const styles = StyleSheet.create({
         flexDirection: "row",
     },
     sidebar: {
-        flex: 1,
         flexDirection: "row",
     },
     chat: {
-        flex: 6,
+        flex:1,
     }
 
 })
