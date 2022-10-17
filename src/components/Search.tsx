@@ -1,12 +1,11 @@
 import { StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import React, { useState } from 'react'
 import Ionicons from '@expo/vector-icons/Ionicons';
-import { screenHeight } from './Input';
 import { collection, getDocs, query, where } from 'firebase/firestore';
 import { db } from '../firebase';
 import { useDispatch, useSelector } from 'react-redux';
-import { search } from '../redux/searchSlice';
-
+import { pendingEnd, pendingStart, search } from '../redux/searchSlice';
+import { screenHeight } from '../constants/Dimensions';
 type SearchProps = {
   onPress: () => {},
   isOpen: boolean,
@@ -17,11 +16,13 @@ const Search: React.FC<SearchProps> = ({ onPress, isOpen }) => {
   const currentUser = useSelector(state => state.userSlice.user)
   const [text, setText] = useState("")
   const handleSearch = async () => {
+    dispatch(pendingStart())
     const q = query(collection(db,"users"),where("username","==",text))
     const querySnapshot = await getDocs(q)
     querySnapshot.forEach((doc) => {
       if(text != currentUser.username){
       dispatch(search(doc.data()))
+      dispatch(pendingEnd())
       }
     })
   }

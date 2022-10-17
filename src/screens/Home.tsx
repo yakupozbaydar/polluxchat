@@ -6,9 +6,9 @@ import Chat from '../components/Chat'
 const Home = () => {
     return (
         <View style={styles.container}>
-            <Animated.View style={styles.sidebar}>
+            <View style={styles.sidebar}>
                 <Sidebar />
-            </Animated.View>
+            </View>
             <View style={styles.chat}>
                 <Chat />
             </View>

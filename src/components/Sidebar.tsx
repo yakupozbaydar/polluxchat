@@ -1,16 +1,16 @@
-import { ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native'
+import { ActivityIndicator, ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import Ionicons from '@expo/vector-icons/Ionicons';
 import Chats from './Chats';
-import { screenHeight } from './Input';
 import { useNavigation } from '@react-navigation/native';
 import Search from './Search';
 import Animated, { useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated';
 import { useDispatch, useSelector } from 'react-redux';
-import { search } from '../redux/searchSlice';
+import { pendingEnd, pendingStart, search } from '../redux/searchSlice';
 import { doc, getDoc,onSnapshot,serverTimestamp, setDoc, updateDoc } from 'firebase/firestore';
 import { db } from '../firebase';
 import { changeChat } from '../redux/chatSlice';
+import { screenHeight } from '../constants/Dimensions';
 
 
 const Sidebar = () => {
@@ -48,6 +48,7 @@ const Sidebar = () => {
     }
   }
   const handleSelect = async () => {
+    dispatch(pendingStart())
     const derivedId = 
     currentUser.uid > searchRes.uid 
     ? currentUser.uid + searchRes.uid
@@ -76,12 +77,12 @@ const Sidebar = () => {
           [derivedId+".date"]:serverTimestamp()
         })
       }
+      dispatch(pendingEnd())
       handleSearch()
     } catch (error) {
       console.log(error);
     }
   }
-
   const handleChat = (userInfo,currentUserUid) => {
     dispatch(changeChat({userInfo,currentUserUid}))
   }
@@ -97,7 +98,8 @@ const Sidebar = () => {
             ) )}
           </ScrollView>
           : <ScrollView>
-            {searchRes.uid != undefined && <Chats onPress={handleSelect} isOpen={isOpen} name={searchRes.username} />}
+            {searchRes.uid != undefined && <Chats onPress={handleSelect} isOpen={isOpen} name={searchRes.username}  />}
+            {searchRes.pending && <ActivityIndicator size={"small"} />}
           </ScrollView>
         }
       </View>

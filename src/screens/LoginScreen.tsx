@@ -27,7 +27,7 @@ const LoginScreen = () => {
   }
 
   return (
-    <KeyboardAvoidingView style={styles.container} behavior={Platform.OS === "ios" ? "padding" : "height"} >
+    <KeyboardAvoidingView style={styles.container} behavior={Platform.OS === "ios" && "padding"} >
       <View style={styles.innerContainer}>
         <View style={{ alignItems: "center" }}>
           <Text style={{ fontSize: 28, fontWeight: "900" }}>

@@ -1,6 +1,6 @@
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React from 'react'
-import { screenHeight, screenWidth } from './Input'
+import { screenHeight, screenWidth } from '../constants/Dimensions'
 
 const Logout = ({onPress}) => {
   return (
@@ -18,8 +18,8 @@ const styles = StyleSheet.create({
         bottom:20,
         justifyContent:"center",
         alignItems:"center",
-        width:screenWidth/3,
-        height:screenHeight/12,
+        width:144,
+        height:64,
         backgroundColor:"red",
         borderRadius:10,
     },

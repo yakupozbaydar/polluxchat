@@ -2,9 +2,8 @@ import { KeyboardAvoidingView, StyleSheet, Text, View, Image, Platform } from 'r
 import React from 'react'
 import Messages from './Messages'
 import Input from './Input'
-import { screenWidth, screenHeight } from "./Input"
 import { useSelector } from 'react-redux'
-import chatSlice from '../redux/chatSlice'
+import { screenHeight } from '../constants/Dimensions'
 
 
 const Chat = () => {
@@ -12,7 +11,7 @@ const Chat = () => {
   return (
     <KeyboardAvoidingView style={styles.container}>
       <View style={styles.headerContainer}>
-        <Image source={{ uri: 'https://pbs.twimg.com/profile_images/486929358120964097/gNLINY67_400x400.png' }} style={{ width: 50, height: 50, borderRadius: 25, marginRight: 5 }} />
+        <Image source={{ uri: user.photoURL }} style={{ width: 50, height: 50, borderRadius: 25, marginRight: 5 }} />
         <Text>{user?.username}</Text>
       </View>
       <View style={styles.chat}>
@@ -33,7 +32,7 @@ const styles = StyleSheet.create({
     borderLeftWidth: 2,
     padding: 10,
     flex:1,
-    marginTop: screenHeight / 20,
+    marginTop: 48,
     borderRadius: 30,
   },
   headerContainer: {

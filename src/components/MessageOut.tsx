@@ -1,6 +1,6 @@
 import { Image, StyleSheet, Text, View } from 'react-native'
 import React from 'react'
-import {screenWidth,screenHeight} from "./Input"
+import { screenWidth } from '../constants/Dimensions'
 const MessageOut = () => {
   return (
     <View style={styles.chat}>

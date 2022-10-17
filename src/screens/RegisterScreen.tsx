@@ -1,5 +1,5 @@
-import { KeyboardAvoidingView, Platform, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
-import React, { useEffect, useState } from 'react'
+import { KeyboardAvoidingView, Platform, SafeAreaView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
+import React, { useState } from 'react'
 import Button1 from '../components/Button1'
 import { useNavigation } from '@react-navigation/native'
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
@@ -7,7 +7,7 @@ import { auth, db } from '../firebase';
 import { useDispatch, useSelector } from 'react-redux';
 import { UserDispatch, UserState } from '../redux/store';
 import { pendingEnd, pendingEndWithAlert, pendingStart } from '../redux/userSlice';
-import { doc, setDoc } from "firebase/firestore"; 
+import { doc, setDoc } from "firebase/firestore";
 
 
 const RegisterScreen = () => {
@@ -22,46 +22,47 @@ const RegisterScreen = () => {
         dispatch(pendingStart())
         await createUserWithEmailAndPassword(auth, email, password)
             .then(async userCredentials => {
-                await updateProfile(userCredentials.user,{displayName:userName})
+                await updateProfile(userCredentials.user, { displayName: userName })
                 const user = userCredentials.user;
-                await setDoc(doc(db,"users",user.uid),{
+                await setDoc(doc(db, "users", user.uid), {
                     email,
                     photo,
-                    uid:user.uid,
-                    username:userName,
+                    uid: user.uid,
+                    username: userName,
                 })
-                await setDoc(doc(db,"userChats",user.uid),{})
-                navigation.navigate("LoginScreen")
+                await setDoc(doc(db, "userChats", user.uid), {})
+                navigation.replace("LoginScreen" as never)
+                dispatch(pendingEnd())
             }).catch(error => dispatch(pendingEndWithAlert(error)))
 
     }
     return (
-        <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"} style={styles.container}>
-            <View style={styles.innerContainer}>
-                <View style={{ alignItems: "center" }}>
-                    <Text style={{ fontSize: 28, fontWeight: "900" }}>
-                        polluxchat
-                    </Text>
-                    <Text style={{ fontSize: 22 }}>
-                        Kayıt Ol
-                    </Text>
+            <KeyboardAvoidingView behavior={Platform.OS === "ios" && "padding"} style={styles.container}>
+                <View style={styles.innerContainer}>
+                    <View style={{ alignItems: "center" }}>
+                        <Text style={{ fontSize: 28, fontWeight: "900" }}>
+                            polluxchat
+                        </Text>
+                        <Text style={{ fontSize: 22 }}>
+                            Kayıt Ol
+                        </Text>
+                    </View>
+                    <View>
+                        <TextInput value={userName} onChangeText={u => setUserName(u)} placeholder='Kullanıcı Adı' style={styles.input} />
+                        <TextInput value={email} onChangeText={e => setEmail(e)} keyboardType='email-address' placeholder='E-mail' style={styles.input} />
+                        <TextInput value={password} autoCorrect={false} onChangeText={p => setPassword(p)} placeholder='Şifre' secureTextEntry style={styles.input} />
+                    </View>
+                    <Button1 pending={pending} text='Register' onPress={handleRegister} />
+                    <View style={styles.textContainer}>
+                        <Text style={styles.text2}>
+                            Hesabın var mı?
+                        </Text>
+                        <TouchableOpacity onPress={() => { navigation.push("LoginScreen" as never) }}>
+                            <Text style={styles.text1}>Giriş Yap</Text>
+                        </TouchableOpacity>
+                    </View>
                 </View>
-                <View>
-                    <TextInput value={userName} onChangeText={u => setUserName(u)} placeholder='Kullanıcı Adı' style={styles.input} />
-                    <TextInput value={email} onChangeText={e => setEmail(e)} keyboardType='email-address' placeholder='E-mail' style={styles.input} />
-                    <TextInput value={password} autoCorrect={false} onChangeText={p => setPassword(p)} placeholder='Şifre' secureTextEntry style={styles.input} />
-                </View>
-                <Button1 pending={pending} text='Register' onPress={handleRegister} />
-                <View style={styles.textContainer}>
-                    <Text style={styles.text2}>
-                        Hesabın var mı?
-                    </Text>
-                    <TouchableOpacity onPress={() => { navigation.replace("LoginScreen") }}>
-                        <Text style={styles.text1}>Giriş Yap</Text>
-                    </TouchableOpacity>
-                </View>
-            </View>
-        </KeyboardAvoidingView>
+            </KeyboardAvoidingView>
     )
 }
 

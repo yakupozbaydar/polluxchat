@@ -1,11 +1,11 @@
 import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
-import { screenHeight, screenWidth } from '../components/Input'
 import Logout from '../components/Logout'
 import { useDispatch, useSelector } from 'react-redux'
 import { setUserLogout } from '../redux/userSlice'
 import { signOut } from 'firebase/auth'
 import { auth } from '../firebase'
+import { screenHeight, screenWidth } from '../constants/Dimensions'
 
 const SettingsScreen = () => {
   const user= useSelector(state => state.userSlice.user)
@@ -42,7 +42,7 @@ const styles = StyleSheet.create({
     width: screenWidth,
     justifyContent: "center",
     alignItems: "center",
-    marginTop: screenHeight / 16,
+    marginTop: 32,
     borderBottomWidth: 2,
   },
   headerText:{

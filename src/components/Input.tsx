@@ -1,9 +1,8 @@
-import { Dimensions, KeyboardAvoidingView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
+import { StyleSheet,TextInput, TouchableOpacity, View } from 'react-native'
 import React from 'react'
 import { Feather } from '@expo/vector-icons';
+import { screenHeight } from '../constants/Dimensions';
 
-export const screenHeight=Dimensions.get("screen").height
-export const screenWidth=Dimensions.get("screen").width
 const Input = () => {
   return (
     <View style={styles.container}>
