@@ -21,10 +21,9 @@ const styles = StyleSheet.create({
   container: {
     borderWidth:1,
     height: screenHeight/16,
-    width:screenWidth*5/6,
     padding: 15,
     flexDirection: "row",
-    justifyContent: "space-between",
+    justifyContent: "space-evenly",
     borderRadius:50,
     alignItems:"center",
   },

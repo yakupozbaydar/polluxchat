@@ -1,16 +1,19 @@
 import { KeyboardAvoidingView, StyleSheet, Text, View, Image, Platform } from 'react-native'
-import React, { useContext } from 'react'
+import React from 'react'
 import Messages from './Messages'
 import Input from './Input'
 import { screenWidth, screenHeight } from "./Input"
+import { useSelector } from 'react-redux'
+import chatSlice from '../redux/chatSlice'
 
 
 const Chat = () => {
+  const user = useSelector(state => state.chatSlice.user)
   return (
     <KeyboardAvoidingView style={styles.container}>
       <View style={styles.headerContainer}>
         <Image source={{ uri: 'https://pbs.twimg.com/profile_images/486929358120964097/gNLINY67_400x400.png' }} style={{ width: 50, height: 50, borderRadius: 25, marginRight: 5 }} />
-        <Text>Mehmet</Text>
+        <Text>{user?.username}</Text>
       </View>
       <View style={styles.chat}>
         <Messages />

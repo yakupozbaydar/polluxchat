@@ -1,29 +1,40 @@
-import { FlatList, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import React, { useEffect, useMemo, useState } from 'react'
+import { ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native'
+import React, { useEffect, useState } from 'react'
 import Ionicons from '@expo/vector-icons/Ionicons';
 import Chats from './Chats';
 import { screenHeight } from './Input';
 import { useNavigation } from '@react-navigation/native';
 import Search from './Search';
-import Animated, { interpolate, useAnimatedStyle, useSharedValue, withRepeat, withSpring, withTiming } from 'react-native-reanimated';
+import Animated, { useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated';
 import { useDispatch, useSelector } from 'react-redux';
-import { UserState } from '../redux/store';
-import { collection, getDoc, getDocs, query, where } from 'firebase/firestore';
-import { db } from '../firebase';
 import { search } from '../redux/searchSlice';
+import { doc, getDoc,onSnapshot,serverTimestamp, setDoc, updateDoc } from 'firebase/firestore';
+import { db } from '../firebase';
+import { changeChat } from '../redux/chatSlice';
 
 
 const Sidebar = () => {
   const [isOpen, setIsOpen] = useState(false)
   const progress = useSharedValue(72)
   const dispatch = useDispatch()
-  const searchRes = useSelector<UserState>(state => state.searchSlice)
+  const currentUser = useSelector(state => state.userSlice.user)
+  const searchRes = useSelector(state => state.searchSlice)
+  const [chats, setChats] = useState([])
   const animatedView = useAnimatedStyle(() => {
     return {
-      width:withSpring(progress.value)
+      width: withSpring(progress.value)
     }
   })
-
+  useEffect(() => {
+    const getChats = () => {
+    const unsub = onSnapshot(doc(db,"userChats",currentUser.uid),(doc) => {
+      setChats(doc.data())
+      return () => {
+        unsub();
+      }
+    })}
+    {currentUser.uid && getChats()}
+  }, [currentUser.uid])
   const navigation = useNavigation()
   const handleSearch = async () => {
     if (isOpen == false) {
@@ -36,15 +47,57 @@ const Sidebar = () => {
       progress.value = 72
     }
   }
+  const handleSelect = async () => {
+    const derivedId = 
+    currentUser.uid > searchRes.uid 
+    ? currentUser.uid + searchRes.uid
+    : searchRes.uid + currentUser.uid;
+         
+    try {
+      const res = await getDoc(doc(db,"chats",derivedId))
+      if(!res.exists()){
+        //create chat collection
+        await setDoc(doc(db,"chats",derivedId),{messages:[]})
+        //create user chats
+        await updateDoc(doc(db,"userChats",currentUser.uid),
+        {
+          [derivedId+".userInfo"]:{
+            uid:searchRes.uid,
+            username:searchRes.username,
+          },
+          [derivedId+".date"]:serverTimestamp()
+        })
+        await updateDoc(doc(db,"userChats",searchRes.uid),
+        {
+          [derivedId+".userInfo"]:{
+            uid:currentUser.uid,
+            username:currentUser.username,
+          },
+          [derivedId+".date"]:serverTimestamp()
+        })
+      }
+      handleSearch()
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  const handleChat = (userInfo,currentUserUid) => {
+    dispatch(changeChat({userInfo,currentUserUid}))
+  }
+
   return (
     <Animated.View style={[styles.container, animatedView]}>
       <Search isOpen={isOpen} onPress={handleSearch} />
       <View style={styles.list}>
         {!isOpen ?
           <ScrollView>
+            {Object.entries(chats).map((chat) => (
+              <Chats name={chat[1].userInfo.username} isOpen={false} onPress={() => handleChat(chat[1].userInfo,currentUser.uid)} />
+            ) )}
           </ScrollView>
           : <ScrollView>
-            {searchRes.email != undefined && <Chats isOpen={isOpen} name={searchRes.username} />}
+            {searchRes.uid != undefined && <Chats onPress={handleSelect} isOpen={isOpen} name={searchRes.username} />}
           </ScrollView>
         }
       </View>

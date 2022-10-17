@@ -1,10 +1,12 @@
-import { configureStore } from '@reduxjs/toolkit'
+import { combineReducers, configureStore } from '@reduxjs/toolkit'
 import  userReducer  from "./userSlice"
 import  searchReducer  from "./searchSlice"
+import chatSlice from './chatSlice'
 export const store = configureStore({
   reducer: {
     userSlice: userReducer,
     searchSlice:searchReducer,
+    chatSlice:chatSlice
   },
 })
 

@@ -2,9 +2,6 @@ import { StyleSheet, View, Text, Animated } from 'react-native'
 import React, { useContext } from 'react'
 import Sidebar from '../components/Sidebar'
 import Chat from '../components/Chat'
-import { useSelector } from 'react-redux'
-import { UserState } from '../redux/store'
-import { auth } from '../firebase'
 
 const Home = () => {
     return (

@@ -2,7 +2,7 @@ import { KeyboardAvoidingView, Platform, StyleSheet, Text, TextInput, TouchableO
 import React, { useEffect, useState } from 'react'
 import Button1 from '../components/Button1'
 import { useNavigation } from '@react-navigation/native'
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { auth, db } from '../firebase';
 import { useDispatch, useSelector } from 'react-redux';
 import { UserDispatch, UserState } from '../redux/store';
@@ -22,6 +22,7 @@ const RegisterScreen = () => {
         dispatch(pendingStart())
         await createUserWithEmailAndPassword(auth, email, password)
             .then(async userCredentials => {
+                await updateProfile(userCredentials.user,{displayName:userName})
                 const user = userCredentials.user;
                 await setDoc(doc(db,"users",user.uid),{
                     email,
@@ -30,8 +31,7 @@ const RegisterScreen = () => {
                     username:userName,
                 })
                 await setDoc(doc(db,"userChats",user.uid),{})
-                console.log(user)
-                navigation.navigate("LoginScreen" as never)
+                navigation.navigate("LoginScreen")
             }).catch(error => dispatch(pendingEndWithAlert(error)))
 
     }
