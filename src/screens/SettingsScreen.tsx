@@ -6,10 +6,9 @@ import { useDispatch, useSelector } from 'react-redux'
 import { setUserLogout } from '../redux/userSlice'
 import { signOut } from 'firebase/auth'
 import { auth } from '../firebase'
-import { UserState } from '../redux/store'
 
 const SettingsScreen = () => {
-  const user= useSelector<UserState>(state => state.userSlice.user)
+  const user= useSelector(state => state.userSlice.user)
   const dispatch = useDispatch()
   const handleLogout = ()  => {
     try {

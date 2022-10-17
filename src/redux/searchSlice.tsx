@@ -1,13 +1,13 @@
 import { createSlice } from "@reduxjs/toolkit"
 
 
-type initialProps = {
+type searchProps = {
     email:string,
     username:string,
     uid:string,
 }
 
-const initialState:initialProps = {
+const initialState:searchProps = {
     uid: "",
     email: "",
     username: ""

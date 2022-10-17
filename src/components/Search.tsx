@@ -4,7 +4,7 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import { screenHeight } from './Input';
 import { collection, getDocs, query, where } from 'firebase/firestore';
 import { db } from '../firebase';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { search } from '../redux/searchSlice';
 
 type SearchProps = {
@@ -14,12 +14,15 @@ type SearchProps = {
 
 const Search: React.FC<SearchProps> = ({ onPress, isOpen }) => {
   const dispatch = useDispatch()
+  const currentUser = useSelector(state => state.userSlice.user)
   const [text, setText] = useState("")
   const handleSearch = async () => {
     const q = query(collection(db,"users"),where("username","==",text))
     const querySnapshot = await getDocs(q)
     querySnapshot.forEach((doc) => {
+      if(text != currentUser.username){
       dispatch(search(doc.data()))
+      }
     })
   }
   return (
@@ -39,7 +42,6 @@ const styles = StyleSheet.create({
     justifyContent:"center",
     alignItems:"center",
     flex:1,
-    backgroundColor: "#fff",
     borderWidth:1,
     padding: 8,
     borderRadius: 25,

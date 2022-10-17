@@ -3,6 +3,7 @@ import { createSlice } from '@reduxjs/toolkit'
 export type initalProps = {
   user:{
     email:string | null,
+    username:string | null,
     uid:string | null,
     photoURL:string | null,
     isOnline:boolean | null,
@@ -14,6 +15,7 @@ export type initalProps = {
 const initialState:initalProps = {
   user: {
     email: null,
+    username:null,
     uid: null,
     photoURL: null,
     isOnline:null,
@@ -39,6 +41,7 @@ const userSlice = createSlice({
     setActiveUser: (state, action) => {
       state.user.email = action.payload.email
       state.user.uid = action.payload.uid
+      state.user.username= action.payload.displayName
       state.user.photoURL = action.payload.photoURL
       state.pending=false
       state.user.isOnline=true
